@@ -1,0 +1,18 @@
+package main
+
+import (
+	"web-server/models"
+)
+
+var tmpArticleList []models.Article
+
+// This function is used to store the main lists into the temporary one
+// for testing
+func saveLists() {
+	tmpArticleList = models.ArticleList
+}
+
+// This function is used to restore the main lists from the temporary one
+func restoreLists() {
+	models.ArticleList = tmpArticleList
+}

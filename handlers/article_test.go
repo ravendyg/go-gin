@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
@@ -8,11 +8,10 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"web-server/handlers"
 	"web-server/models"
 )
 
-type content struct {
+type contentXML struct {
 	Articles []models.Article `xml:"Article"`
 }
 
@@ -21,7 +20,7 @@ type content struct {
 func TestShowIndexPageUnauthenticated(t *testing.T) {
 	r := getRouter(true)
 
-	r.GET("/", handlers.ShowIndexPage)
+	r.GET("/", ShowIndexPage)
 
 	// Create a request to send to the above route
 	req, _ := http.NewRequest("GET", "/", nil)
@@ -44,7 +43,7 @@ func TestShowIndexPageUnauthenticated(t *testing.T) {
 func TestShowArticlePageUnauthenticated(t *testing.T) {
 	r := getRouter(true)
 
-	r.GET("/articles/view/:article_id", handlers.GetArticle)
+	r.GET("/articles/view/:article_id", GetArticle)
 
 	// Create a request to send to the above route
 	req, _ := http.NewRequest("GET", "/articles/view/1", nil)
@@ -67,7 +66,7 @@ func TestShowArticlePageUnauthenticated(t *testing.T) {
 func TestListArticleJSON(t *testing.T) {
 	r := getRouter(true)
 
-	r.GET("/", handlers.ShowIndexPage)
+	r.GET("/", ShowIndexPage)
 
 	// Create a request to send to the above route
 	req, _ := http.NewRequest("GET", "/", nil)
@@ -95,7 +94,7 @@ func TestListArticleJSON(t *testing.T) {
 func TestListArticleXML(t *testing.T) {
 	r := getRouter(true)
 
-	r.GET("/", handlers.ShowIndexPage)
+	r.GET("/", ShowIndexPage)
 
 	// Create a request to send to the above route
 	req, _ := http.NewRequest("GET", "/", nil)
@@ -113,7 +112,7 @@ func TestListArticleXML(t *testing.T) {
 			return false
 		}
 
-		var c content
+		var c contentXML
 		err = xml.Unmarshal(p, &c)
 		return err == nil && statusOK && len(c.Articles) == 2
 	})

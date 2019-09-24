@@ -7,5 +7,15 @@
         Home
       </a>
     </div>
+    {{ if .logged}}
+      <ul class="nav navbar-nav">
+        <li><a href="/u/user">User</a></li>
+      </ul>
+    {{ else }}
+      <ul class="nav navbar-nav">
+        <li><a href="/u/register">Register</a></li>
+      </ul>
+    {{end}}
+
   </div>
 </nav>

@@ -1,0 +1,23 @@
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<h1>User</h1>
+
+<div class="panel panel-default col-sm-6">
+  <div class="panel-body">
+    <!--If there's an error, display the error-->
+    {{ if .ErrorTitle}}
+    <p class="bg-danger">
+      {{.ErrorTitle}}: {{.ErrorMessage}}
+    </p>
+    {{end}}
+    <!--Create a form that POSTs to the `/u/register` route-->
+    <form class="form" action="/u/logout" method="POST">
+      <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
+  </div>
+</div>
+
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

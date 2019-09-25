@@ -11,6 +11,8 @@ func initializeRoutes() {
 	{
 		userRoutes.GET("/register", handlers.ShowRegistrationPage)
 		userRoutes.POST("/register", handlers.Register)
+		userRoutes.GET("/login", handlers.ShowLoginPage)
+		userRoutes.POST("/login", handlers.Login)
 		userRoutes.GET("/user", handlers.ShowUserPage)
 		userRoutes.POST("/logout", handlers.Logout)
 	}

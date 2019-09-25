@@ -19,14 +19,16 @@ func render(c *gin.Context, data gin.H, templateName string) {
 		c.XML(http.StatusOK, content{Article: data["payload"]})
 	default:
 		token, _ := c.Cookie("token")
-		logged := false
-		if len(token) > 0 {
-			user := models.FindByToken(token)
-			if user != nil {
-				logged = true
+		if data["logged"] == nil {
+			logged := false
+			if len(token) > 0 {
+				user := models.FindByToken(token)
+				if user != nil {
+					logged = true
+				}
 			}
+			data["logged"] = logged
 		}
-		data["logged"] = logged
 		c.HTML(http.StatusOK, templateName, data)
 	}
 }

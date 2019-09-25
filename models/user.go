@@ -9,7 +9,6 @@ import (
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"-"`
-	tokens   []string
 }
 
 // TODO: Refactor.
@@ -31,7 +30,7 @@ func FindByToken(token string) *User {
 	return user
 }
 
-var users = make(map[string]bool)
+var users = make(map[string]*User)
 
 // RegisterUser -
 func RegisterUser(username, password string) (*User, error) {
@@ -41,15 +40,19 @@ func RegisterUser(username, password string) (*User, error) {
 		return nil, errors.New("The username isn't available")
 	}
 
-	users[username] = true
 	user := User{
 		Username: username,
 		Password: password,
-		tokens:   make([]string, 0),
 	}
+	users[username] = &user
 	return &user, nil
 }
 
 func isUsernameAvailable(username string) bool {
-	return !users[username]
+	return users[username] == nil
+}
+
+// FindUser -
+func FindUser(username string) *User {
+	return users[username]
 }

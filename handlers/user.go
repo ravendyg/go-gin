@@ -26,6 +26,23 @@ func ShowRegistrationPage(c *gin.Context) {
 	render(c, data, "register.html")
 }
 
+// ShowLoginPage -
+func ShowLoginPage(c *gin.Context) {
+	token, _ := c.Cookie("token")
+	if len(token) > 0 {
+		user := models.FindByToken(token)
+		if user != nil {
+			c.Redirect(http.StatusFound, "/u/user")
+			return
+		}
+	}
+
+	data := gin.H{
+		"title": "Login",
+	}
+	render(c, data, "login.html")
+}
+
 // ShowUserPage -
 func ShowUserPage(c *gin.Context) {
 	token, _ := c.Cookie("token")
@@ -56,7 +73,8 @@ func Register(c *gin.Context) {
 		models.AddToken(token, user)
 
 		data := gin.H{
-			"title": "Successful registration & Login",
+			"title":  "Successful registration & Login",
+			"logged": true,
 		}
 		render(c, data, "login-successful.html")
 	} else {
@@ -66,6 +84,37 @@ func Register(c *gin.Context) {
 		}
 		c.HTML(http.StatusBadRequest, "register.html", data)
 	}
+}
+
+// Login -
+func Login(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+
+	user := models.FindUser(username)
+	if user == nil {
+		data := gin.H{
+			"ErrorTitle": "Not found",
+		}
+		c.HTML(http.StatusBadRequest, "login.html", data)
+		return
+	}
+	if user.Password != password {
+		data := gin.H{
+			"ErrorTitle": "Unauthorized",
+		}
+		c.HTML(http.StatusBadRequest, "login.html", data)
+		return
+	}
+
+	token := generateToken()
+	c.SetCookie("token", token, 3600, "", "", false, true)
+	models.AddToken(token, user)
+	data := gin.H{
+		"title":  "Successful login",
+		"logged": true,
+	}
+	render(c, data, "login-successful.html")
 }
 
 //Logout -

@@ -1,6 +1,11 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"sync/atomic"
+)
+
+var id int64 = 2
 
 // Article -
 type Article struct {
@@ -29,4 +34,19 @@ func GetArticleByID(articleID int64) (*Article, error) {
 	}
 
 	return nil, errors.New("sdfsd")
+}
+
+// NewArticle -
+func NewArticle(title string, content string) {
+	article := Article{
+		ID:      getNextID(),
+		Title:   title,
+		Content: content,
+	}
+	ArticleList = append(ArticleList, article)
+}
+
+func getNextID() int64 {
+	atomic.AddInt64(&id, 1)
+	return id
 }

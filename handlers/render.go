@@ -25,6 +25,8 @@ func render(c *gin.Context, data gin.H, templateName string) {
 				user := models.FindByToken(token)
 				if user != nil {
 					logged = true
+				} else {
+					removeToken(c)
 				}
 			}
 			data["logged"] = logged

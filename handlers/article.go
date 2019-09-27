@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"strconv"
 	"web-server/models"
 
@@ -22,4 +23,24 @@ func GetArticle(c *gin.Context) {
 		"payload": article,
 	}
 	render(c, data, "article.html")
+}
+
+// GetNewArticleForm -
+func GetNewArticleForm(c *gin.Context) {
+	_user, _ := c.Get("user")
+	if _user != nil {
+		data := gin.H{}
+		render(c, data, "create-article.html")
+	} else {
+		c.Redirect(http.StatusFound, "/u/login")
+	}
+}
+
+// CreateArticle -
+func CreateArticle(c *gin.Context) {
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+
+	models.NewArticle(title, content)
+	c.Redirect(http.StatusFound, "/")
 }

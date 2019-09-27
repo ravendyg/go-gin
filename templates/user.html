@@ -11,6 +11,7 @@
       {{.ErrorTitle}}: {{.ErrorMessage}}
     </p>
     {{end}}
+    <p>Username: {{ .username }}</p>
     <!--Create a form that POSTs to the `/u/register` route-->
     <form class="form" action="/u/logout" method="POST">
       <button type="submit" class="btn btn-primary">Logout</button>

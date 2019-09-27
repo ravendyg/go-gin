@@ -2,18 +2,24 @@ package main
 
 import (
 	"web-server/handlers"
+	"web-server/middlewares"
 )
 
 func initializeRoutes() {
 	router.GET("/", handlers.ShowIndexPage)
-	router.GET("/article/view/:article_id", handlers.GetArticle)
+	articleRoutes := router.Group("/article")
+	{
+		articleRoutes.GET("/view/:article_id", handlers.GetArticle)
+		articleRoutes.GET("/new", middlewares.GetUser, handlers.GetNewArticleForm)
+		articleRoutes.POST("/new", middlewares.GetUser, handlers.CreateArticle)
+	}
 	userRoutes := router.Group("/u")
 	{
-		userRoutes.GET("/register", handlers.ShowRegistrationPage)
+		userRoutes.GET("/register", middlewares.GetUser, handlers.ShowRegistrationPage)
 		userRoutes.POST("/register", handlers.Register)
 		userRoutes.GET("/login", handlers.ShowLoginPage)
 		userRoutes.POST("/login", handlers.Login)
-		userRoutes.GET("/user", handlers.ShowUserPage)
 		userRoutes.POST("/logout", handlers.Logout)
 	}
+	router.GET("/user", middlewares.GetUser, handlers.ShowUserPage)
 }

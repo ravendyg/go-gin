@@ -27,13 +27,8 @@ func GetArticle(c *gin.Context) {
 
 // GetNewArticleForm -
 func GetNewArticleForm(c *gin.Context) {
-	_user, _ := c.Get("user")
-	if _user != nil {
-		data := gin.H{}
-		render(c, data, "create-article.html")
-	} else {
-		c.Redirect(http.StatusFound, "/u/login")
-	}
+	data := gin.H{}
+	render(c, data, "create-article.html")
 }
 
 // CreateArticle -

@@ -10,16 +10,16 @@ func initializeRoutes() {
 	articleRoutes := router.Group("/article")
 	{
 		articleRoutes.GET("/view/:article_id", handlers.GetArticle)
-		articleRoutes.GET("/new", middlewares.GetUser, handlers.GetNewArticleForm)
-		articleRoutes.POST("/new", middlewares.GetUser, handlers.CreateArticle)
+		articleRoutes.GET("/new", middlewares.GetUser(), middlewares.RequireAuth(), handlers.GetNewArticleForm)
+		articleRoutes.POST("/new", middlewares.GetUser(), middlewares.RequireAuth(), handlers.CreateArticle)
 	}
 	userRoutes := router.Group("/u")
 	{
-		userRoutes.GET("/register", middlewares.GetUser, handlers.ShowRegistrationPage)
+		userRoutes.GET("/register", middlewares.GetUser(), handlers.ShowRegistrationPage)
 		userRoutes.POST("/register", handlers.Register)
 		userRoutes.GET("/login", handlers.ShowLoginPage)
 		userRoutes.POST("/login", handlers.Login)
 		userRoutes.POST("/logout", handlers.Logout)
 	}
-	router.GET("/user", middlewares.GetUser, handlers.ShowUserPage)
+	router.GET("/user", middlewares.GetUser(), middlewares.RequireAuth(), handlers.ShowUserPage)
 }
